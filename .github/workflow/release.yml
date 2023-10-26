@@ -1,47 +1,32 @@
-name: Realease
+name: Code Review Checks
 
 on:
   push:
     branches:
-      -main
+      - main  # Change this to your default branch
+  pull_request:
+    branches:
+      - main  # Change this to your default branch
+
 jobs:
-  release:
-      runs-on: ubuntu-latest
+  code-review:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      steps:
-      -name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
 
-      -name: set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14
+      - name: Install Dependencies
+        run: npm install
 
-        -name: Bump Version
-        run: npm version minor -m "Bump version to %s"
+      - name: Run Linter
+        run: npm run lint  # Replace with your linter command
 
-        -name: Generate Release Notes
-        run: npm run generate-release-notes
+      - name: Run Tests
+        run: npm test  # Replace with your test command
 
-        -name: Commit and push
-        run: |
-          git push --follow-tags
-          git push origin main
-
-          -name: create Github Realease
-          id: create_release
-          uses: softprops/action-gh-release@v1
-          with:
-            files: dist/*
-            env:
-            GITHUB_TOKEN: ${{ SECRETS.github_token }}
-
-            -name: Publish Realease notes
-            run: |
-            echo "Realease Notes" > release_notes.txt
-            cat changelog.md >> release_notes.txt
-            gh release upload ${{ steps.create_release.output.upload_url }} ./release_notes.txt
-
-            env:
-            GH_CLI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
