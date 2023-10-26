@@ -1,0 +1,31 @@
+name: Code Review Checks
+
+on:
+  push:
+    branches:
+      - branch1  # Change this to your default branch
+  pull_request:
+    branches:
+      - branch1  # Change this to your default branch
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Linter
+        run: npm run lint  # Replace with your linter command
+
+      - name: Run Tests
+        run: npm test  # Replace with your test command
