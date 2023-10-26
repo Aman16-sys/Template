@@ -3,10 +3,10 @@ name: Code Review Checks
 on:
   push:
     branches:
-      - main  # Change this to your default branch
+      - branch1  # Change this to your default branch
   pull_request:
     branches:
-      - main  # Change this to your default branch
+      - branch1  # Change this to your default branch
 
 jobs:
   code-review:
